@@ -1,0 +1,61 @@
+Add a machine API for Bankr. Do not rebuild the UI. Do not duplicate product logic. The existing app stays the source of truth.
+
+ENDPOINT
+• Method: POST
+• Path: /api/run
+• Content-Type: application/json
+• Auth: require header X-Shared-Secret: &lt;Peanut_Deep_in_Deez_Nutz>
+Also accept Authorization: Bearer &lt;Peanut_Deep_in_Deez_Nutz>
+• If the secret is missing or wrong: return 401 JSON { "ok": false, "error": "unauthorized" }
+• Store the secret as a server-side env/secret. Never put it in frontend JS, HTML, or client bundles.
+
+INPUT (exact shape Bankr will send)
+{
+"prompt": "CAP",
+"handle": "@capstiller",
+"timestamp": 1787964931000
+}
+
+Validation:
+• prompt required string, trim it, reject empty → 400 { "ok": false, "error": "missing_prompt" }
+• handle optional string; if present, normalize to start with @
+• timestamp optional number; ignore if missing
+• Ignore unknown extra fields
+
+BEHAVIOR
+Run the SAME core path a human uses in the main UI, with prompt as the user input and handle as the requesting X user.
+Do not scrape the page. Call the same functions/state the UI already uses.
+Keep replies short enough to post on X (aim ≤ 250 characters for text, hard cap 270).
+No markdown tables. No code fences. Plain text.
+
+OUTPUT (always JSON)
+Success 200:
+{
+"ok": true,
+"text": "the exact reply Bankr should post on X",
+"link": "https://<this-app-public-url>/",
+"handle": "@capstiller",
+"prompt": "CAP",
+"timestamp": 1787964931000,
+"data": {}
+}
+
+Fill data with any structured result the UI already computes (keep it small).
+If the run fails: 200 or 422 is fine as long as JSON is:
+{
+"ok": false,
+"text": "short human error Bankr can post",
+"error": "machine_code",
+"link": "https://<this-app-public-url>/"
+}
+
+EXTRAS
+• CORS: allow POST from any origin for this route only, headers Content-Type, X-Shared-Secret, Authorization
+• Rate limit this route: 30 requests / minute / IP and 10 / minute / handle
+• Log handle + prompt server-side; do not log the shared secret
+• Add a one-line comment in the API file: Bankr contract v1 — do not rename fields
+
+After you add it, show me:
+1. the final route and header name
+2. one example curl with the sample payload above
+3. the exact success JSON that curl would get

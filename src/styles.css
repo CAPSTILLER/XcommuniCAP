@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0a0a;
+  --color-surface: #171717;
+  --color-surface-2: #202020;
+  --color-surface-3: #2a2a2a;
+  --color-fg: #f4f4f5;
+  --color-muted: #a1a1aa;
+  --color-subtle: #71717a;
+  --color-accent: #ba0a0e;
+  --color-accent-hover: #d41218;
+  --color-accent-pressed: #9a080c;
+  --color-accent-fg: #fff7f7;
+  --color-border: rgb(244 244 245 / 10%);
+  --color-ring: #ba0a0e;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bebas Neue", "Arial Narrow", Impact, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --shadow-border: 0 0 0 1px rgb(255 255 255 / 8%);
+  --shadow-glow: 0 0 0 1px rgb(186 10 14 / 28%), 0 0 48px rgb(186 10 14 / 12%);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--matrix-cols, 19), minmax(0, 1fr));
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.matrix-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  line-height: 1;
+  font-size: clamp(0.5rem, 2.6vw, 1.35rem);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 4%);
+  contain: layout style;
+}
+
+.matrix-grid.is-alt .matrix-cell {
+  font-size: clamp(0.55rem, 3.2vw, 1.05rem);
+}
+
+.matrix-grid.is-stack {
+  max-width: min(100%, 22rem);
+  margin-inline: auto;
+}
+
+.matrix-grid.is-stack .matrix-cell {
+  font-size: clamp(1rem, 8vw, 2.1rem);
+}
+
+.matrix-grid.is-drawing .matrix-cell {
+  cursor: crosshair;
+}
+
+.mini-matrix-wrap {
+  width: calc(19 * 4px + 18 * 1px + 6px);
+  height: calc(7 * 4px + 6 * 1px + 6px);
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: #050506;
+  box-shadow: var(--shadow-border);
+}
+
+.mini-matrix {
+  display: grid;
+  gap: 1px;
+  padding: 3px;
+  background: #050506;
+  transform-origin: top left;
+}
+
+.mini-matrix span {
+  width: 4px;
+  height: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 3px;
+  line-height: 4px;
+  background: #1a1a1f;
+}
+
+.x-tweet-col {
+  min-width: 0;
+}
+
+.x-tweet-phrase {
+  margin: 2px 0 0;
+  font-size: 15px;
+  line-height: 20px;
+  color: #fff;
+  white-space: pre-wrap;
+}
+
+.x-tweet-art {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.x-tweet-row {
+  display: grid;
+  grid-template-columns: repeat(var(--tweet-cols, 19), minmax(0, 1fr));
+  width: 100%;
+}
+
+.x-tweet-row span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(100cqw / var(--tweet-cols, 19) * 0.98);
+  line-height: 1.15;
+  min-width: 0;
+}

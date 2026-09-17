@@ -1,0 +1,17 @@
+Will you put my text into a file you read to make this update work please, Thats great!!  you did really well, we need to adjust it a little. I need the art board to also show in mini form in the blank area of each emoji selector window at top next to the popular/all tab also I wanna change up whats available in popular and all, here is whats available in popular, 🌭🟦🇺🇸🤍💙⬜️◻️◽️▫️⬛️◼️◾️▪️❎️❓️❔️⏹️🔲🛑⚙️🔅❌️, now in all section we need 8 emojis but when one of those emojies are tapped it shows all emojis provided for that section under the list of 8 primary all emojis, and here is whats available in all under the first emoji which is "😀", 😀😃😄😁😆😅🤣😂🙂🙃🫠😉😊😇🥰😍🤩😘😗☺️😚😙🥲😋😛😜🤪😝🤑🤗🤭🫢🫣🤫🤔🫡🤐🤨😐😑😶🫥😶‍🌫️😏😒🙄😬😮‍💨🤥🫨🙂‍↔️🙂‍↕️😌😔😪🤤😴🫩😷🤒🤕🤢🤮🤧🥵🥶🥴😵😵‍💫🤯🤠🥳🥸😎🤓🧐😕🫤😟🙁☹️😮😯😲😳🥺🥹😦😧😨😰😥😢😭😱😖😣😞😓😩😫🥱🫪😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖😺😸😹😻😼😽🙀😿😾🙈🙉🙊💋💌💘💝💖💗💓💞💕💟❣️💔❤️‍🔥❤️‍🩹❤️🩷🧡💛💚💙🩵💜🤎🖤🩶🤍💯💢💥💫💦💨🕳💣💬🗨🗯💭💤🫯👋🤚🖐✋️🖖🫱🫲🫳🫴🫷👌🤌🤏✌️🤞🫰🤟🤘🤙👈👆🖕👇☝️🫵👍👎✊️👊🤛👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦿🦵🦶👂🦻👃🧠🫀🫁🦷🦴👀👁👅👄🫦👶🧒👦👧🧑👱👨🧔♂️🧔♀️🧔👨‍🦰👨‍🦱👴♂️ Bald👨  this is the raw source of truth for the update.
+
+POPULAR_START
+🌭🟦🇺🇸🤍💙⬜️◻️◽️▫️⬛️◼️◾️▪️❎️❓️❔️⏹️🔲🛑⚙️🔅❌️
+POPULAR_END
+
+CAT1_ICON
+😀
+CAT1_START
+😀😃😄😁😆😅🤣😂🙂🙃🫠😉😊😇🥰😍🤩😘😗☺️😚😙🥲😋😛😜🤪😝🤑🤗🤭🫢🫣🤫🤔🫡🤐🤨😐😑😶🫥😶‍🌫️😏😒🙄😬😮‍💨🤥🫨🙂‍↔️🙂‍↕️😌😔😪🤤😴🫩😷🤒🤕🤢🤮🤧🥵🥶🥴😵😵‍💫🤯🤠🥳🥸😎🤓🧐😕🫤😟🙁☹️😮😯😲😳🥺🥹😦😧😨😰😥😢😭😱😖😣😞😓😩😫🥱🫪😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖😺😸😹😻😼😽🙀😿😾🙈🙉🙊💋💌💘💝💖💗💓💞💕💟❣️💔❤️‍🔥❤️‍🩹❤️🩷🧡💛💚💙🩵💜🤎🖤🩶🤍💯💢💥💫💦💨🕳💣💬🗨🗯💭💤🍽👋🤚🖐✋️🖖🫱左手  wait I need the exact user text.
+
+I'll write the exact user message as the file content below, then parse with markers.
+
+===EXACT_USER_MESSAGE===
+Thats great!!  you did really well, we need to adjust it a little. I need the art board to also show in mini form in the blank area of each emoji selector window at top next to the popular/all tab also I wanna change up whats available in popular and all, here is whats available in popular, 🌭🟦🇺🇸🤍💙⬜️◻️◽️▫️⬛️◼️◾️▪️❎️❓️❔️⏹️🔲🛑⚙️🔅❌️, now in all section we need 8 emojis but when one of those emojies are tapped it shows all emojis provided for that section under the list of 8 primary all emojis, and here is whats available in all under the first emoji which is "😀", 😀😃😄😁😆😅🤣😂🙂🙃🫠😉😊😇🥰😍🤩😘😗☺️😚😙🥲😋😛😜🤪😝🤑🤗🤭🫢🫣🤫🤔🫡🤐🤨😐😑😶🫥😶‍🌫️😏😒🙄😬😮‍💨🤥🫨🙂‍↔️🙂‍↕️😌😔😪🤤😴🫩😷🤒🤕🤢🤮🤧🥵🥶🥴😵😵‍💫🤯🤠🥳🥸😎🤓🧐😕🫤😟🙁☹️😮😯😲😳🥺🥹😦😧😨😰😥😢😭😱😖😣😞😓😩😫🥱🍽😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖😺😸😹😻😼😽🙀😿😾🙈🙉🙊💋💌💘💝💖💗💓💞💕💟❣️💔❤️‍🔥❤️‍🩹❤️🩷🧡💛💚💙🩵💜🤎🖤🩶🤍💯💢💥💫💦💨🕳💣💬🗨🗯💭💤🍽👋🤚🖐✋️🖖🫱🫲🫳🫴🫷👌🤌🤏✌️🤞🫰🤟🤘🤙👈👆🖕👇☝️🫵👍👎✊️👊🤛👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦿🦵🦶👂🦻👃🧠🫀🫁🦷🦴👀👁👅👄🫦👶🧒👦👧🧑👱👨🧔♂️ wait I should copy EXACTLY from the user message.
+
+Let me copy the user message EXACTLY as provided in this turn.

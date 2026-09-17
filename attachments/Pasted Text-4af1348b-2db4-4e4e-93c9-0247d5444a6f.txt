@@ -1,0 +1,59 @@
+here is the package and a prompt structured for grok to recreate xcommunicap cleanly.
+
+zip download:
+https://bankr-user-files.s3.us-west-2.amazonaws.com/users/67f1ff43ab3225e2a621f78d/30aoj94wr3ke9mjw/xcommunicap-web.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIA4AQ3UJ3MSEVSSB6E%2F20260828%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260828T152009Z&X-Amz-Expires=900&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIComy4H3FkP8c9L6X8sN8TlWo6padV3IKjaJVtZUAhK8AiEA4bBzdMynQSWcf4GLVsbOiOM3T8FDWYAx%2FXq1YwhHdVYq8gMIUBAAGgw4MjU3NjU0MTY2NjUiDPNnTrmxXcWLVbDy%2ByrPA4KfT9AFb7hKbVJO4ZB7PGGpleK0xeSGKeSfuLwBiuXkEMay2e46TUniBerrvQc%2FcPXIwbIhgypinH2BIn9sa0VJNeZzicqILiEFa1bliYXjfoKmkpiQOQv11%2FRMqnJtnK5xXcZhuMiBno3VHIthq2ls%2FwNbWPJaru90kTAI%2Fr215yW80x4GORFJAC5LRDGMx%2BBcFrqIhiu7iyBmlRfvycTp4305bqQgmUUpY6VnMGgbByf%2F8Jnq0lng19sEDwa4Q1sc8Bgtdvs8MNEYqURbk0CQQaTiAVrqT8A8ltCCAq%2BXQkLplN0YMT%2FQra74X66Vt8nMYDGz5%2BzzpTSO3J4g6r6fc7NrKY%2B61%2Fb7831IYfY7TF49Dec8sdmIfdbWhEFdjaCI8eece0kyTCL57hsqoZiVkSYTCg%2F6LzoOJVLrR%2FeanrBb4M1qGkBZuITEGZhSrroCeUH66TBd%2FayyEw%2FL1WazGEz0jRZ6JtKYSyOSAGG200iLgIDQQR63A3nNPif3sxKZYJuLEwV6j%2BQRN%2B32eFqtXhwTz3vDcNzDZVenKS0rYD9Gsu%2F%2FQjtHPlU9q8OTRUUVBYpXR%2F5Z6CTz36XBZCqP7BcutS0a4FtWo1cCLhcw98vG1AY6oQG1sl8%2FaUA52lIyfVBGQDofWmM0A6j%2Fxv%2BZYLZl8iVmx2hZufWL7899VCzAkVrnQxRK4KPkXGCpaPF8nMPDBKRvd2%2FC9mjRbia%2Fh6BUrxaHdlbd9I5QiYyXTtaFdMxS2Hw%2FuQONbn8WTGRS0JBWxNjqWkqbJC0Yln4BrpKFTB6Q5HAoFB7p5TC4dLdwlsQD5H%2FPTx4zQThGYWM3O7PMBcW6Bw%3D%3D&X-Amz-Signature=d2f1d5832bc1b4708e082aae396cdd357978127873fc74dc45a8c152103a8ac9&X-Amz-SignedHeaders=host&response-content-disposition=attachment&x-amz-checksum-mode=ENABLED&x-id=GetObject
+
+file summary:
+• index.html containing the complete zero-dependency single-page application (all on-chain gating, smart contract checks, and bankr sdk wrappers stripped out)
+• all 123 emojis and custom emoji inputs unlocked and available to all users by default
+• direct clipboard copy using standard navigator clipboard api with textarea fallback
+• direct x / twitter intent integration for posting
+
+---
+
+prompt for grok:
+
+You are an expert front-end engineer. Build a complete, production-ready, single-file HTML/CSS/JavaScript web application called "XcommuniCAP". This is an emoji matrix text-art generator specifically designed for creating formatted emoji art posts on X (Twitter) and Farcaster.
+
+1. Layout & Core Dimensions
+• Standard Mode: 19 columns by 7 rows (133 emojis total). This grid ratio formats cleanly in the X feed timeline.
+• Alt Vertical Mode: 19 columns by 52 rows (988 emojis total) for tall, vertical scrolling banner posts.
+• Display: A responsive CSS grid where each cell is a square containing either the background emoji or foreground/letter emoji.
+
+2. Typography & Bitmaps (5x5 Pixel Font Dictionary)
+• Implement a 5x5 binary bitmap dictionary for all uppercase letters (A-Z), numbers (0-9), and punctuation (!, ?, $, space).
+• 19x7 Mode Character Layout:
+- Accepts 1 to 3 characters.
+- 1 character: centered at column index 7 (spanning columns 7 to 11), row offset 1.
+- 2 characters: positioned at column indices 3 and 11, row offset 1.
+- 3 characters: positioned at column indices 1, 7, and 13, row offset 1.
+• 19x52 Alt Vertical Mode Character Layout:
+- Accepts 1 to 8 characters arranged vertically from top to bottom.
+- Characters centered horizontally at column index 7.
+- Each character is 5 rows high with a 1-row gap between letters, centered vertically on the 52-row canvas.
+
+3. Interactive Controls & Modes
+• Mode Switcher: Toggle between 19x7 Standard and 19x52 Alt Vertical format.
+• Quick "CAP" Button: Instantly sets text to "CAP" and renders the signature cap pattern.
+• Word Input & Set Button: Text input with live character cap (3 for normal mode, 8 for alt mode).
+• Freehand Drawing Mode: When toggled on, clicking or dragging across cells toggles individual cell states between background and foreground.
+• Invert Button: Inverts all cells on the matrix.
+• Clear Button: Resets all cells to the background emoji.
+• Swap Button: Swaps the current background and foreground emojis.
+
+4. Emoji Selectors
+• Two picker panels: Background Emoji and Letter/Foreground Emoji.
+• Tabbed selection for each:
+- Popular tab (11 staple emojis): blue square, white square, hotdog, hammer and pick, blue heart, white heart, razor, ogre, eyes, black square, b button.
+- All Emojis tab: 123 curated unicode emojis.
+• Custom Emoji Input: Text box allowing the user to paste any unicode emoji or symbol as background or foreground.
+
+5. Export & Sharing
+• Copy Art Button: Formats the entire grid as a multiline string (rows joined by newline characters) and copies it directly to the clipboard. Show a temporary toast notification on success.
+• Post to X Button: Encodes the multiline text and opens https://twitter.com/intent/tweet?text=... in a new window.
+
+6. Visual Styling & Theme
+• Dark theme: #0A0A0A base background, #171717 card backgrounds, #BA0A0E red accents and glows.
+• Clean typography, smooth transitions, mobile-responsive layout, and zero external dependencies.
+
+Deliver the complete, working, self-contained index.html document with inline style and script tags.

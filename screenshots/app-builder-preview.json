@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "XcommuniCAP",
+      "hasCanvas": false,
+      "bodyTextLen": 743,
+      "bodyTextHash": "8ee24fb999d9bfdfb9da93395e33ce28adadb686eb6c0a10192716ce8891b122",
+      "bodyTextPrefix": "XcommuniCAP Emoji matrix for X and Farcaster. Stamp letters, dra",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "XcommuniCAP",
+      "hasCanvas": false,
+      "bodyTextLen": 743,
+      "bodyTextHash": "8ee24fb999d9bfdfb9da93395e33ce28adadb686eb6c0a10192716ce8891b122",
+      "bodyTextPrefix": "XcommuniCAP Emoji matrix for X and Farcaster. Stamp letters, dra",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
