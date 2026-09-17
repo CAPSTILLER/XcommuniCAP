@@ -52,6 +52,22 @@ export const Route = createRootRoute({
         <AuthProvider>
           <Outlet />
         </AuthProvider>
+        <a
+          className="gear-home-cutout fixed bottom-3 left-1/2 z-40 inline-flex -translate-x-1/2 opacity-90 transition-opacity hover:opacity-100 active:opacity-70 focus-visible:opacity-100"
+          href="https://landonthis.gearup.wtf"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Gear home — landonthis"
+        >
+          <img
+            src="/gear-logo-cutout.svg"
+            alt=""
+            height={56}
+            width={213}
+            className="h-14 w-auto"
+            style={{ imageRendering: "pixelated" }}
+          />
+        </a>
         <Scripts />
       </body>
     </html>
