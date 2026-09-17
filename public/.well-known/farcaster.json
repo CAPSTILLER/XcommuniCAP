@@ -3,18 +3,28 @@
     "version": "1",
     "name": "XcommuniCAP",
     "subtitle": "Emoji matrix for X + Farcaster",
-    "description": "Stamp 5×5 letters onto a grid, draw freehand, copy, and post.",
-    "homeUrl": "https://xcommunicap.gearup.wtf/",
-    "iconUrl": "https://xcommunicap.gearup.wtf/icon-1024.png",
-    "splashImageUrl": "https://xcommunicap.gearup.wtf/splash-200.png",
+    "description": "Stamp 5\u00d75 letters onto a grid, draw freehand, copy, and post.",
+    "homeUrl": "https://xcap.gearup.wtf/",
+    "iconUrl": "https://xcap.gearup.wtf/icon-1024.png",
+    "splashImageUrl": "https://xcap.gearup.wtf/splash-200.png",
     "splashBackgroundColor": "#0A0A0A",
-    "heroImageUrl": "https://xcommunicap.gearup.wtf/og.jpg",
+    "heroImageUrl": "https://xcap.gearup.wtf/og.jpg",
     "ogTitle": "XcommuniCAP",
     "ogDescription": "Emoji matrix text-art generator for X and Farcaster.",
-    "ogImageUrl": "https://xcommunicap.gearup.wtf/og.jpg",
+    "ogImageUrl": "https://xcap.gearup.wtf/og.jpg",
     "primaryCategory": "social",
-    "tags": ["gear", "emoji", "base", "farcaster", "x"],
-    "requiredChains": ["eip155:8453"],
-    "requiredCapabilities": ["wallet.getEthereumProvider"]
+    "tags": [
+      "gear",
+      "emoji",
+      "base",
+      "farcaster",
+      "x"
+    ],
+    "requiredChains": [
+      "eip155:8453"
+    ],
+    "requiredCapabilities": [
+      "wallet.getEthereumProvider"
+    ]
   }
 }

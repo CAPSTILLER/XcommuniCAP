@@ -5,11 +5,11 @@ import appCss from "../styles.css?url";
 
 const APP_NAME = "XcommuniCAP";
 
-const APP_ORIGIN = (import.meta.env.VITE_APP_ORIGIN as string | undefined)?.replace(/\/$/, "") || "https://xcommunicap.gearup.wtf";
+const APP_ORIGIN = (import.meta.env.VITE_APP_ORIGIN as string | undefined)?.replace(/\/$/, "") || "https://xcap.gearup.wtf";
 const APP_DESCRIPTION =
   "Emoji matrix text-art generator for X and Farcaster. Stamp 5×5 letters onto a 19×7 or 19×52 grid, draw freehand, copy, and post.";
 const OG_IMAGE = `${APP_ORIGIN}/og.jpg`;
-const FC_MINIAPP = "{\"version\":\"1\",\"imageUrl\":\"https://xcommunicap.gearup.wtf/og.jpg\",\"button\":{\"title\":\"Open\",\"action\":{\"type\":\"launch_miniapp\",\"name\":\"XcommuniCAP\",\"url\":\"https://xcommunicap.gearup.wtf/\",\"splashImageUrl\":\"https://xcommunicap.gearup.wtf/splash-200.png\",\"splashBackgroundColor\":\"#0A0A0A\"}}}";
+const FC_MINIAPP = "{\"version\":\"1\",\"imageUrl\":\"https://xcap.gearup.wtf/og.jpg\",\"button\":{\"title\":\"Open\",\"action\":{\"type\":\"launch_miniapp\",\"name\":\"XcommuniCAP\",\"url\":\"https://xcap.gearup.wtf/\",\"splashImageUrl\":\"https://xcap.gearup.wtf/splash-200.png\",\"splashBackgroundColor\":\"#0A0A0A\"}}}";
 
 export const Route = createRootRoute({
   head: () => ({
