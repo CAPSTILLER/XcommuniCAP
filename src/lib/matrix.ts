@@ -9,9 +9,14 @@ export const CHAR_SIZE = 5;
 export const CHAR_STACK_WIDTH = 4;
 export const CHAR_GAP = 1;
 export const MAX_STACK_CHARS = 10;
+/** Test board: 9 emoji per row, user-adjustable height. */
+export const COLS_TEST = 9;
+export const ROWS_TEST_DEFAULT = 14;
+export const ROWS_TEST_MIN = 5;
+export const ROWS_TEST_MAX = 30;
 
-export type Mode = "standard" | "alt" | "zora" | "stack";
-export type AppId = "x" | "zora" | "messenger";
+export type Mode = "standard" | "alt" | "zora" | "stack" | "test9";
+export type AppId = "x" | "zora" | "messenger" | "test";
 
 export type BoardSpec = {
   mode: Mode;
@@ -44,11 +49,17 @@ export const APPS: readonly AppSpec[] = [
     label: "Messenger",
     boards: [{ mode: "stack", name: "Messenger", size: "6×word" }],
   },
+  {
+    id: "test",
+    label: "Test",
+    boards: [{ mode: "test9", name: "9 wide", size: "9×rows" }],
+  },
 ];
 
 export function appIdFor(mode: Mode): AppId {
   if (mode === "zora") return "zora";
   if (mode === "stack") return "messenger";
+  if (mode === "test9") return "test";
   return "x";
 }
 
@@ -64,10 +75,32 @@ export function boardFor(mode: Mode): BoardSpec {
 export function colsFor(mode: Mode): number {
   if (mode === "stack") return COLS_STACK;
   if (mode === "zora") return COLS_ZORA;
+  if (mode === "test9") return COLS_TEST;
   return COLS;
 }
 
-export function rowsFor(mode: Mode, letters = 1): number {
+/** Clamp a test-board row count into the supported range (5–30). */
+export function clampTestRows(value: unknown): number {
+  const n = typeof value === "number" && Number.isFinite(value)
+    ? Math.round(value)
+    : ROWS_TEST_DEFAULT;
+  return Math.max(ROWS_TEST_MIN, Math.min(ROWS_TEST_MAX, n));
+}
+
+/** How many stacked 5×5 letters (5 rows + 1 gap each) fit in `rows`. */
+export function testLetterCapacity(rows: number): number {
+  return Math.max(1, Math.floor((clampTestRows(rows) + CHAR_GAP) / (CHAR_SIZE + CHAR_GAP)));
+}
+
+/**
+ * `testRows` only affects the `test9` board; every other mode ignores it.
+ */
+export function rowsFor(
+  mode: Mode,
+  letters = 1,
+  testRows = ROWS_TEST_DEFAULT,
+): number {
+  if (mode === "test9") return clampTestRows(testRows);
   if (mode === "alt") return ROWS_ALT;
   if (mode === "stack") {
     const n = Math.max(1, Math.min(MAX_STACK_CHARS, letters));
@@ -76,18 +109,30 @@ export function rowsFor(mode: Mode, letters = 1): number {
   return ROWS_STANDARD;
 }
 
-export function cellCount(mode: Mode, letters = 1): number {
-  return colsFor(mode) * rowsFor(mode, letters);
+export function cellCount(
+  mode: Mode,
+  letters = 1,
+  testRows = ROWS_TEST_DEFAULT,
+): number {
+  return colsFor(mode) * rowsFor(mode, letters, testRows);
 }
 
-export function maxChars(mode: Mode): number {
+export function maxChars(mode: Mode, testRows = ROWS_TEST_DEFAULT): number {
+  if (mode === "test9") return testLetterCapacity(testRows);
   if (mode === "alt") return 8;
   if (mode === "stack") return MAX_STACK_CHARS;
   return 3;
 }
 
-export function emptyMatrix(mode: Mode, letters = 1): boolean[] {
-  return Array.from({ length: cellCount(mode, letters) }, () => false);
+export function emptyMatrix(
+  mode: Mode,
+  letters = 1,
+  testRows = ROWS_TEST_DEFAULT,
+): boolean[] {
+  return Array.from(
+    { length: cellCount(mode, letters, testRows) },
+    () => false,
+  );
 }
 
 function stampChar(
@@ -131,8 +176,35 @@ function letterColumns(count: number, cols: number): number[] {
   ];
 }
 
-export function stampText(text: string, mode: Mode): boolean[] {
+export function stampText(
+  text: string,
+  mode: Mode,
+  testRows = ROWS_TEST_DEFAULT,
+): boolean[] {
   const chars = Array.from(text.toUpperCase()).filter((ch) => ch in FONT_5X5);
+
+  if (mode === "test9") {
+    const totalRows = rowsFor(mode, 1, testRows);
+    const grid = emptyMatrix(mode, 1, totalRows);
+    const used = chars.slice(0, testLetterCapacity(totalRows));
+    if (used.length === 0) return grid;
+    const height = used.length * (CHAR_SIZE + CHAR_GAP) - CHAR_GAP;
+    const startRow = Math.floor((totalRows - height) / 2);
+    const startCol = Math.floor((COLS_TEST - CHAR_SIZE) / 2);
+    used.forEach((ch, i) => {
+      stampChar(
+        grid,
+        ch,
+        startCol,
+        startRow + i * (CHAR_SIZE + CHAR_GAP),
+        totalRows,
+        COLS_TEST,
+        FONT_5X5,
+        CHAR_SIZE,
+      );
+    });
+    return grid;
+  }
 
   if (mode === "stack") {
     const used = chars.slice(0, MAX_STACK_CHARS);
@@ -238,6 +310,13 @@ export function tweetIntentUrl(text: string): string {
 }
 
 export function parseMode(value: unknown): Mode {
-  if (value === "alt" || value === "stack" || value === "zora") return value;
+  if (
+    value === "alt" ||
+    value === "stack" ||
+    value === "zora" ||
+    value === "test9"
+  ) {
+    return value;
+  }
   return "standard";
 }

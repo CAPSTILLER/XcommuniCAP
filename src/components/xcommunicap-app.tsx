@@ -10,7 +10,9 @@ import {
   Copy,
   Eraser,
   Eye,
+  Minus,
   Pencil,
+  Plus,
   Repeat2,
   Shuffle,
   Type,
@@ -35,12 +37,16 @@ import {
   type AppId,
   boardFor,
   cellCount,
+  clampTestRows,
   colsFor,
   copyToClipboard,
   formatArt,
   maxChars,
   type Mode,
   parseMode,
+  ROWS_TEST_DEFAULT,
+  ROWS_TEST_MAX,
+  ROWS_TEST_MIN,
   rowsFor,
   stampText,
   tweetIntentUrl,
@@ -53,7 +59,9 @@ import {
 } from "@/lib/tweet-length";
 import { cn } from "@/lib/utils";
 
-const STORAGE_KEY = "xcommunicap:v3";
+const STORAGE_KEY = "xcommunicap:v4";
+/** Pre-test-board key; read once as a fallback so saved work carries over. */
+const LEGACY_STORAGE_KEY = "xcommunicap:v3";
 
 type SavedState = {
   mode: Mode;
@@ -63,7 +71,14 @@ type SavedState = {
   cells: boolean[];
   drawing: boolean;
   phrase: string;
+  /** Height of the 9-wide test board (v4+). */
+  testRows?: number;
 };
+
+/** Resize a 9-wide test board, keeping the top rows and padding/trimming the bottom. */
+function resizeRows(cells: boolean[], cols: number, rows: number): boolean[] {
+  return Array.from({ length: cols * rows }, (_, i) => cells[i] ?? false);
+}
 
 const DEFAULT_TEXT = "CAP";
 
@@ -81,18 +96,23 @@ export function XcommuniCapApp() {
   const [copied, setCopied] = useState(false);
   const [phrase, setPhrase] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [testRows, setTestRows] = useState(ROWS_TEST_DEFAULT);
   const skipSave = useRef(true);
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw =
+        localStorage.getItem(STORAGE_KEY) ??
+        localStorage.getItem(LEGACY_STORAGE_KEY);
       if (raw) {
         const saved = JSON.parse(raw) as SavedState;
         const nextMode: Mode = parseMode(saved.mode);
+        const nextRows = clampTestRows(saved.testRows);
         const nextText = sanitizeText(
           saved.text ?? DEFAULT_TEXT,
-          maxChars(nextMode),
+          maxChars(nextMode, nextRows),
         );
+        setTestRows(nextRows);
         setMode(nextMode);
         setText(nextText);
         if (saved.bg) setBg(saved.bg);
@@ -103,12 +123,13 @@ export function XcommuniCapApp() {
         }
         if (
           Array.isArray(saved.cells) &&
-          saved.cells.length === cellCount(nextMode, nextText.length) &&
+          saved.cells.length ===
+            cellCount(nextMode, nextText.length, nextRows) &&
           saved.cells.every((v) => typeof v === "boolean")
         ) {
           setCells(saved.cells);
         } else {
-          setCells(stampText(nextText, nextMode));
+          setCells(stampText(nextText, nextMode, nextRows));
         }
       }
     } catch {
@@ -121,17 +142,26 @@ export function XcommuniCapApp() {
       skipSave.current = false;
       return;
     }
-    const payload: SavedState = { mode, text, bg, fg, cells, drawing, phrase };
+    const payload: SavedState = {
+      mode,
+      text,
+      bg,
+      fg,
+      cells,
+      drawing,
+      phrase,
+      testRows,
+    };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch {
       /* quota / private mode */
     }
-  }, [mode, text, bg, fg, cells, drawing, phrase]);
+  }, [mode, text, bg, fg, cells, drawing, phrase, testRows]);
 
   const cols = colsFor(mode);
-  const rows = rowsFor(mode, text.length);
-  const cap = maxChars(mode);
+  const rows = rowsFor(mode, text.length, testRows);
+  const cap = maxChars(mode, testRows);
   const art = useMemo(
     () => formatArt(cells, mode, bg, fg),
     [cells, mode, bg, fg],
@@ -141,19 +171,34 @@ export function XcommuniCapApp() {
 
   const applyText = useCallback(
     (value: string, nextMode: Mode = mode) => {
-      const clean = sanitizeText(value, maxChars(nextMode));
+      const clean = sanitizeText(value, maxChars(nextMode, testRows));
       setText(clean);
-      setCells(stampText(clean, nextMode));
+      setCells(stampText(clean, nextMode, testRows));
     },
-    [mode],
+    [mode, testRows],
   );
 
   function switchMode(next: Mode) {
     if (next === mode) return;
-    const clean = sanitizeText(text, maxChars(next));
+    const clean = sanitizeText(text, maxChars(next, testRows));
     setMode(next);
     setText(clean);
-    setCells(stampText(clean, next));
+    setCells(stampText(clean, next, testRows));
+  }
+
+  /** −/+ on the 9-wide test board. Draw mode keeps the drawing; otherwise letters restamp centered. */
+  function changeTestRows(delta: number) {
+    if (mode !== "test9") return;
+    const next = clampTestRows(testRows + delta);
+    if (next === testRows) return;
+    const clean = sanitizeText(text, maxChars(mode, next));
+    setTestRows(next);
+    setText(clean);
+    if (drawing) {
+      setCells((prev) => resizeRows(prev, cols, next));
+    } else {
+      setCells(stampText(clean, mode, next));
+    }
   }
 
   function switchApp(id: AppId) {
@@ -177,7 +222,12 @@ export function XcommuniCapApp() {
   }
 
   function clear() {
-    setCells(Array.from({ length: cellCount(mode, text.length) }, () => false));
+    setCells(
+      Array.from(
+        { length: cellCount(mode, text.length, testRows) },
+        () => false,
+      ),
+    );
   }
 
   function swap() {
@@ -258,6 +308,8 @@ export function XcommuniCapApp() {
             fg={fg}
             drawing={drawing}
             onPaint={onPaint}
+            postWeight={postWeight}
+            onRows={changeTestRows}
           />
 
           <aside className="flex flex-col gap-4">
@@ -289,7 +341,9 @@ export function XcommuniCapApp() {
                         ? "UP TO 8"
                         : mode === "stack"
                           ? "UP TO 10"
-                          : "ABC"
+                          : mode === "test9"
+                            ? `UP TO ${cap}`
+                            : "ABC"
                     }
                     aria-label="Matrix text"
                     onChange={(e) => applyText(e.target.value)}
@@ -502,6 +556,8 @@ function CanvasCard({
   fg,
   drawing,
   onPaint,
+  postWeight,
+  onRows,
 }: {
   mode: Mode;
   rows: number;
@@ -511,6 +567,8 @@ function CanvasCard({
   fg: string;
   drawing: boolean;
   onPaint: (index: number, value: boolean) => void;
+  postWeight: number;
+  onRows: (delta: number) => void;
 }) {
   const spec = boardFor(mode);
   const app = appFor(mode);
@@ -529,10 +587,51 @@ function CanvasCard({
           </span>
         ) : null}
       </div>
+      {mode === "test9" ? (
+        <div className="flex items-center justify-between gap-3 border-b border-white/5 px-4 py-2">
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => onRows(-1)}
+              disabled={rows <= ROWS_TEST_MIN}
+              aria-label="Remove a row"
+            >
+              <Minus className="size-3.5" />
+            </Button>
+            <span
+              className="min-w-16 text-center font-mono text-xs tabular-nums text-muted"
+              aria-live="polite"
+            >
+              {rows} rows
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => onRows(1)}
+              disabled={rows >= ROWS_TEST_MAX}
+              aria-label="Add a row"
+            >
+              <Plus className="size-3.5" />
+            </Button>
+          </div>
+          <span
+            className={cn(
+              "font-mono text-xs tabular-nums",
+              postWeight > X_CHAR_LIMIT ? "text-accent" : "text-subtle",
+            )}
+          >
+            X {postWeight}/{X_CHAR_LIMIT}
+            {postWeight > X_CHAR_LIMIT ? " · over" : ""}
+          </span>
+        </div>
+      ) : null}
       <div
         className={cn(
           "bg-bg p-3 sm:p-4",
-          (mode === "alt" || mode === "stack") &&
+          (mode === "alt" || mode === "stack" || mode === "test9") &&
             "max-h-[min(70dvh,44rem)] overflow-y-auto",
         )}
       >

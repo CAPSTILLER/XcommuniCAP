@@ -103,6 +103,15 @@
   font-size: clamp(1rem, 8vw, 2.1rem);
 }
 
+.matrix-grid.is-test9 {
+  max-width: min(100%, 26rem);
+  margin-inline: auto;
+}
+
+.matrix-grid.is-test9 .matrix-cell {
+  font-size: clamp(0.9rem, 7vw, 1.9rem);
+}
+
 .matrix-grid.is-drawing .matrix-cell {
   cursor: crosshair;
 }

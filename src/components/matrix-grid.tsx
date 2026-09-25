@@ -41,6 +41,7 @@ export function MatrixGrid({
         "matrix-grid",
         mode === "alt" && "is-alt",
         mode === "stack" && "is-stack",
+        mode === "test9" && "is-test9",
         drawing && "is-drawing",
       )}
       style={
