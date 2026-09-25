@@ -186,10 +186,13 @@ export function XcommuniCapApp() {
     setCells(stampText(clean, next, testRows));
   }
 
-  /** −/+ on the 9-wide test board. Draw mode keeps the drawing; otherwise letters restamp centered. */
-  function changeTestRows(delta: number) {
+  /**
+   * Set the 9-wide test board height (clamped 5–30), from −/+ or the typed
+   * number. Draw mode keeps the drawing; otherwise letters restamp centered.
+   */
+  function setTestRowsTo(target: number) {
     if (mode !== "test9") return;
-    const next = clampTestRows(testRows + delta);
+    const next = clampTestRows(target);
     if (next === testRows) return;
     const clean = sanitizeText(text, maxChars(mode, next));
     setTestRows(next);
@@ -309,7 +312,7 @@ export function XcommuniCapApp() {
             drawing={drawing}
             onPaint={onPaint}
             postWeight={postWeight}
-            onRows={changeTestRows}
+            onRows={setTestRowsTo}
           />
 
           <aside className="flex flex-col gap-4">
@@ -568,7 +571,7 @@ function CanvasCard({
   drawing: boolean;
   onPaint: (index: number, value: boolean) => void;
   postWeight: number;
-  onRows: (delta: number) => void;
+  onRows: (rows: number) => void;
 }) {
   const spec = boardFor(mode);
   const app = appFor(mode);
@@ -594,23 +597,18 @@ function CanvasCard({
               variant="outline"
               size="icon"
               className="size-8"
-              onClick={() => onRows(-1)}
+              onClick={() => onRows(rows - 1)}
               disabled={rows <= ROWS_TEST_MIN}
               aria-label="Remove a row"
             >
               <Minus className="size-3.5" />
             </Button>
-            <span
-              className="min-w-16 text-center font-mono text-xs tabular-nums text-muted"
-              aria-live="polite"
-            >
-              {rows} rows
-            </span>
+            <RowsInput rows={rows} onCommit={onRows} />
             <Button
               variant="outline"
               size="icon"
               className="size-8"
-              onClick={() => onRows(1)}
+              onClick={() => onRows(rows + 1)}
               disabled={rows >= ROWS_TEST_MAX}
               aria-label="Add a row"
             >
@@ -645,6 +643,57 @@ function CanvasCard({
         />
       </div>
     </section>
+  );
+}
+
+/** Typed row count for the test board: free typing, clamped 5–30 on blur/Enter. */
+function RowsInput({
+  rows,
+  onCommit,
+}: {
+  rows: number;
+  onCommit: (rows: number) => void;
+}) {
+  // null = not editing, so the field always mirrors the live row count.
+  const [draft, setDraft] = useState<string | null>(null);
+
+  function commit() {
+    if (draft === null) return;
+    const n = Number.parseInt(draft, 10);
+    const next = Number.isFinite(n) ? clampTestRows(n) : rows;
+    setDraft(null);
+    if (next !== rows) onCommit(next);
+  }
+
+  return (
+    <label className="flex items-center gap-1 font-mono text-xs tabular-nums text-muted">
+      <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        enterKeyHint="done"
+        maxLength={2}
+        value={draft ?? String(rows)}
+        aria-label={`Rows (${ROWS_TEST_MIN}–${ROWS_TEST_MAX})`}
+        onChange={(e) => setDraft(e.target.value.replace(/\D/g, ""))}
+        onFocus={(e) => {
+          setDraft(String(rows));
+          e.currentTarget.select();
+        }}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            e.currentTarget.blur(); // blur commits
+          } else if (e.key === "Escape") {
+            setDraft(null);
+            e.currentTarget.blur();
+          }
+        }}
+        className="h-8 w-11 rounded-md bg-bg px-1 text-center text-sm text-fg shadow-[var(--shadow-border)] outline-none focus-visible:shadow-[0_0_0_1px_var(--color-accent)]"
+      />
+      rows
+    </label>
   );
 }
 
